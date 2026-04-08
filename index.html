@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>職人マッチングアプリ - 2026年版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .header .date {
+            margin-top: 10px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .search-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .search-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .skill-checkbox {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #e0e0e0;
+        }
+
+        .skill-checkbox:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-checkbox.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .skill-checkbox input[type="checkbox"] {
+            margin-right: 10px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+        }
+
+        .skill-checkbox label {
+            cursor: pointer;
+            font-size: 0.95em;
+            color: #333;
+            flex: 1;
+        }
+
+        .skill-checkbox input[type="checkbox"]:checked + label {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .search-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-mode {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+
+        .search-mode label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.95em;
+        }
+
+        .search-mode input[type="radio"] {
+            margin-right: 5px;
+            accent-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-clear {
+            background: #dc3545;
+        }
+
+        .btn-clear:hover {
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .results-section {
+            margin-top: 30px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .results-header h2 {
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        .results-count {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .craftsmen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .craftsman-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .craftsman-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .craftsman-header {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .craftsman-name {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .craftsman-company {
+            color: #666;
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .craftsman-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+
+        .skill-count {
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .no-results-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .no-results h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .stats-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .craftsmen-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔨 職人マッチングアプリ</h1>
+            <p>作業内容を選択して、最適な職人を見つけましょう</p>
+            <div class="date">📅 更新日: 2026年2月18日</div>
+        </div>
+
+        <div class="main-content">
+            <div class="search-section">
+                <div class="stats-box">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalCraftsmen">0</div>
+                        <div class="stat-label">登録職人数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalSkills">0</div>
+                        <div class="stat-label">作業種類</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalCompanies">0</div>
+                        <div class="stat-label">登録企業数</div>
+                    </div>
+                </div>
+
+                <h2>📋 作業内容を選択</h2>
+                <div class="skills-grid" id="skillsGrid"></div>
+                
+                <div class="search-controls">
+                    <div class="search-mode">
+                        <label>
+                            <input type="radio" name="searchMode" value="OR" checked>
+                            いずれかの作業ができる (OR検索)
+                        </label>
+                        <label>
+                            <input type="radio" name="searchMode" value="AND">
+                            すべての作業ができる (AND検索)
+                        </label>
+                    </div>
+                    <button class="btn" onclick="searchCraftsmen()">🔍 検索</button>
+                    <button class="btn btn-clear" onclick="clearSelection()">🗑️ クリア</button>
+                </div>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-header">
+                    <h2>🎯 検索結果</h2>
+                    <div class="results-count" id="resultsCount">0人</div>
+                </div>
+                <div class="craftsmen-grid" id="craftsmenGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let craftsmenData = [];
+        let skillsList = [];
+        let companiesSet = new Set();
+
+        // CSVデータ
+        const csvData = `社名,氏名,玉かけ,小型移動式クレーン,車輌系建設機械,研削といし,刈払機,チェンソー,高所作業車,丸のこ,剪定作業,造園作業,造園軽作業,草刈り,芝張り,伐採,土木,左官作業,アルミ作業,舗装,塗装作業,補修作業,板金作業,コア抜き作業,電気作業,水道作業,掃除作業,建築作業,解体作業
+ビクトル,勝部凌太,1,1,1,,,,,,1,1,,1,,,,,,,,,,,,,,,
+⼭光園,出川 亮太,,,,,,,,,1,1,,1,,,,,,,,,,,,,,,
+⼩⽥左官,⼩⽥清,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+ミヨシ産業,岩佐,,,,,,,,,,,,,,,,,1,,,,,,,,,,
+⼀幸建設,佐々⽊,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+翔栄建設,今岡,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+グリーンフィールズ株式会社,グリーンフィールズ株式会社,,,,,,,,,,,,,,1,,,,,,,,,,,,,
+⽇野組,⽇野組,,,,,,,,,,,1,1,,,1,,,,,,,,,,,,
+下嶋芝⽣,下嶋芝⽣,,,,,,,,,,,,,1,,,,,,,,,,,,,,
+グリーンフィールズ株式会社,藤原 透,,,,,,,,,,,,,,1,,,,,,,,,,,,,
+ツリーワーク株式会社,藤原 ⼤輔,,,,,,,,,,,,,,1,,,,,,,,,,,,,
+うえやガーデン,煎澤 智弘,,,,,,,,,,,1,1,,,1,,,,,,,,,,,,
+⽵内⼯業,,,,,,,,,,,,,,,,,,,,,,,,,,,1
+エイシン,,,,,,,,,,,,,,,,,,,,,,,,,,,1
+とびす園,坂根 祐太,,,,,,,,,1,1,,,,,,,,,,,,,,,,,
+泉左官,泉 明,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+株式会社 エスティーカンパニー,,,,,,,,,1,,1,1,,,1,,,,,,,,,,,,
+とびす園,曽⽥ 和孝,,,,,,,,,1,1,,,,,,,,,,,,,,,,,
+進誠,進誠,,,,,,,,,,1,,,,,,1,,,,,,,,,,,
+出雲⼟建,出雲⼟建,,,,,,,,,,1,,,,,,,,,,,,,,,,,
+⽯原組,⽯原組,,,,,,,,,,,,,,,,,,,,,,,,,,,1
+⾼橋造園⼟⽊,坂根 祐太,,,,,,,,,1,1,,,,,,,,,,,,,,,,,
+ワイエム,中⽥ 陽,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+⾼橋造園⼟⽊,佐々⽊ あゆみ,,,,,,,,,1,1,,1,,,,,,,,,,,,,,,
+とびす園,⽥中 稲男,,,,,,,,,1,1,,,,,,,,,,,,,,,,,
+とびす園,須⽥ 剛,,,,,,,,,1,1,,,,,,,,,,,,,,,,,
+とびす園,福⽥ 晋太郎,,,,,,,,,1,1,,,,,,,,,,,,,,,,,
+うえやガーデン,江⾓ 義則,,,,,,,,,,,1,,,,1,,,,,,,,,,,,
+うえやガーデン,神⾨ 豊,,,,,,,,,,,1,,,,1,,,,,,,,,,,,
+うえやガーデン,森脇 武志,,,,,,,,,,,1,,,,1,,,,,,,,,,,,
+ゴウド技建⼯業,森脇 武志,,,,,,,,,,,1,,,,1,,,,,,,,,,,,
+あらこも造園,⼭崎 ⻯⼀,,,,,,,,,1,,,,,,,,,,,,,,,,,,
+ゴウド技建⼯業,神⾨ 豊,,,,,,,,,,,1,,,,1,,,,,,,,,,,,
+オフィスヴァルト,松本 尚⼦,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+ワイエム,⻑崎 貞雄,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+庭の園⼭,園⼭ 栄樹,,,,,,,,,1,1,,1,,,,,,,,,,,,,,,
+⾼野 ⼋郎,⾼野 ⼋郎,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+伊藤板⾦,伊藤板⾦,,,,,,,,,,,,,,,,,1,,,,,,,,,,
+黒⽥斫り,黒⽥ 直孝,,,,,,,,,,,,,,,,,,,,,,,,,,,1
+(有)ことぶき塗装,佐藤 靖,,,,,,,,,,,,,,,,,,1,,,,,,,,,
+(有)ヤマダ看板,⼭⽥ 隆章,,,,,,,,,,,,,,,,,,,1,,,,,,,,
+新宮建築,新宮 元太,,,,,,,,,,,,,,,,,,,,,,,,,,1,
+とびす園,⻄脇 純平,1,1,1,,1,1,1,,1,1,,1,,,,,,,,,,,,,,,
+㈱ネクスト,櫻井 利光,,,,,,,,,,,,,,,,,,,,,,,,,,,1
+須⼭⽊材,須⼭⽊材,,,,,,,,,,,,,,,,,,,,,,,,,,1,
+⽯川造園,宮本 ⾥美,,,,,,,,,,1,,,,,,,,,,,,,,,,,
+ニッタ住基,新⽥ 耕治,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+⼀幸建設⼯業,佐々⽊,,,,,,,,,,,,,,,,,,1,,,,,,,,,
+⾼橋造園⼟⽊,岡 ⼤地,,,,,,,,,1,,,,,,,,,,,,,,,,,,
+さんもく⼯業,さんもく⼯業,,,,,,,,,,,,,,,,,,,,,,,,,,1,
+誠実,⾼橋,,,,,,,,,,,,,,,,,,1,,,,,,,,,
+(株)Ash,河⾕ 俊彦,,,,,,,,,,,,,,,,,,,,1,,,,,,,
+井上⼤⼯,井上 信⾏,,,,,,,,,,,,,,,,,,,,,,,,,,1,
+⽮野 崇,⽮野 崇,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+⽇成プラスター,伊藤,,,,,,,,,,,,,,,,,,,,,,,,,,,1
+東幸建設,波多野 全⼈,,,,,,,,,,,,,,,,,,1,,,,,,,,,
+庭庭,⽯倉 秀⼀,,,,,,,,,1,1,,,,,,1,,,,,,,,,,,
+⾼⾒塗装,⾼⾒塗装,,,,,,,,,,,,,,,,,,,1,,,,,,,,
+太⽥建材,尾添,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+太⽥建材,⼤⽥,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+⾼橋造園⼟⽊,⻄脇 純平,,,,,,,,,1,1,,,,,,,,,,,,,,,,,
+⾼橋造園⼟⽊,須⽥ 剛,,,,,,,,,1,1,,,,,,,,,,,,,,,,,
+吉川⼯務店,吉川⼯務店,,,,,,,,,,,,,,,1,,,,,,,,,,,,
+園⼭ 登,園⼭ 登,,,,,,,,,,,1,1,,,,,,,,,,,,,,,
+鎌⽥塗料店,鎌⽥塗料店,,,,,,,,,,,,,,,,,,,1,,,,,,,,
+柿⽥設備⼯業,柿⽥設備⼯業,,,,,,,,,,,,,,,,,,,,,,,,1,,,
+⼭光園,園⼭ 登,,,,,,,,,,,1,1,,,,,,,,,,,,,,,
+⼤⾕ 祐介,⼤⾕ 祐介,1,,,,1,,1,,,1,,,,,,1,,,,,,,,,,,
+⽇野組,川瀬 貴⾏,,,1,,1,1,1,,,,1,1,,,1,,,,,,,,,,,,
+⽇野組,原⽥ 克彦,1,1,1,,,,,,,,1,1,,,1,,,,,,,,,,,,
+⽯川造園,⽯川 晴喜,,,,,,,,,1,1,,,,,,,,,,,,,,,,,
+⽯川造園,⽯川 篤,1,1,1,,1,1,1,,1,1,,,,,,,,,,,,,,,,,
+⾼橋造園⼟⽊,⾼橋 静枝,,,,,,,,,,,1,,,,,,,,,,,,,,,,
+⾼橋造園⼟⽊,⾼橋 幸⼦,,,,,,,,,,,1,1,,,,,,,,,,,,,,,
+⾼橋造園⼟⽊,⾼橋 安夫,,,,,,,,,,,1,1,,,,,,,,,,,,,,,
+うえやガーデン,宮本 達也,,,,,,,,,1,,,1,,,,,,,,,,,,,,,
+うえやガーデン,中村 智嗣,,,,,,,,,,,,,,,,,,,,,,,,,,,
+⼭光園,岡 博之,,,,,,,,,,,,,,,,,,,,,,,,,,,
+うえやガーデン,林 天⽃,1,,,,,,,,,,,,,,,,,,,,,,,,,,
+⼀幸建設⼯業,,,,,,,,,,,,,,,,1,,,1,,,,,,,,,
+㈱ミヨシ産業,ミヨシ産業,,,,,,,,,,,,,,,,,1,,,,,,,,,,
+中野 進也,中野 進也,,,,,,,,,,,,,,,,,1,,,,,,,,,,
+庭の園⼭,永瀬 真太郎,,,,,,,,,1,1,,,,1,,,,,,,,,,,,,
+㈱こっこー,佐藤 陽⼀,,,,,,,,,,,,,,,,,1,,,,,,,,,,
+⼭光園,⼭根 光則,,,,,,,,,1,1,,1,,,,,,,,,,,,,,,
+㈲塩野板⾦⼯作所,塩野 稔昭,,,,,,,,,,,,,,,,,,,,,1,,,,,,
+うえやガーデン,上原 秀延,,,,,,,,,,,1,1,,,1,,,,,,,,,,,,
+⽇野組,⻄村⾼光,1,1,1,,1,,1,,,,1,1,,,1,,,,,,,,,,,,
+⽇野組,宇賀俊通,,,,,,,,,,,1,1,,,1,,,,,,,,,,,,
+⽇野組,松浦崇宏,,,,,,,,,,,1,1,,,1,,,,,,,,,,,,
+⽇野組,⽇野敏⾏,1,1,1,,,,,,,,1,1,,,1,,,,,,,,,,,,
+ワイエム,松本 健太郎,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+㈲ラコサン商会,梶⾕ 宏⼈,,,,,,,,,,,,,,,,,,,,,,1,,,,,
+㈲ラコサン商会,岡 雄⼆,,,,,,,,,,,,,,,,,,,,,,1,,,,,
+陰⼭左官⼯業所,陰⼭ 達也,,,1,,,,,,,,,,,,,1,,,,,,,,,,,
+福間商事㈱,嘉⽥ 諭,1,,,,,,1,,,,,,,,,,1,,,,,,,,,,
+福間商事㈱,陰⼭ 薫,1,,,,,,,,,,,,,,,,1,,,,,,,,,,
+福間商事㈱,桑原 浩,1,,,,,,,,,,,,,,,,1,,,,,,,,,,
+㈲⽇成プラスター,⼤野 敏⾏,1,1,,,,,,,,,,,,,,,,,,,,,,,,,1
+樋野⼤⼯,樋野 誠,1,,,,,,,,,,,,,,,,,,,,,,,,,1,
+⼭光園,神⽥修,,,,,,,,,1,1,,1,,,,,,,,,,,,,,,
+柘植観象園,柘植健樹,1,1,1,,,1,,,,,,,,,,,,,,,,,,,,,
+タケダ造園,⼟江徹郎,1,1,1,1,1,1,1,1,1,1,,1,,,,,,,,,,,,,,,
+タケダ造園,曽⽥良治,1,1,1,1,1,1,1,1,,1,,,,,,,,,,,,,,,,,
+北神電⼯,今岡 司,,,,,,,,,,,,,,,,,,,,,,,1,,,,
+永⻑ 孝,永⻑（錦織） 孝,,,,,,,,,,,,,,,,,,,,,,,,,1,,
+㈱オフィスヴァルト,松本 尚⼦,,1,,,,,,,,,,,,,1,1,,1,,,,,,,,,
+ハナダ電器,花⽥ 和彦,,,,,,,,,,,,,,,,,,,,,,,1,,,,
+あらこも造園,荒薦 勉,1,1,1,,,1,,,1,1,,1,,,,,,,,,,,,,,,
+うえやガーデン,⾜⽴ 亮,1,,1,,1,1,,,1,,,1,,,1,,,,,,,,,,,,
+うえやガーデン,上原 健史,1,,1,,1,1,,,1,,,1,,,1,,,,,,,,,,,,
+恒松設備,恒松 真樹,,,,,,,,,,,,,,,,,,,,,,,,1,,,
+陰⼭左官⼯業所,陰⼭ 正広,,,1,,,,,,,,,,,,,1,,,,,,,,,,,
+⽯倉左官,⽯倉 賢治,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+⽵下技建,⽵下 芳朗,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+井上左官,渡部 明雄,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+井上左官,布野 三佐夫,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+井上左官,井上 和夫,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+⼭光園,⼭根 ⼀裕,1,1,1,,,,,,1,1,,1,,,,,,,,,,,,,,,
+庭の園⼭,永⼾ 真⼀,1,1,1,,,,,,,,,,,,,,,,,,,,,,,,
+庭の園⼭,園⼭ 伸孝,1,1,1,,,1,1,,,,,,,,,,,,,,,,,,,,
+㈱タケダ造園,森⽥ ⼤介,1,1,1,1,1,1,,1,1,1,1,1,,,,1,1,,,,,,1,1,,,
+⾼橋造園⼟⽊,⾼橋 誠治,1,1,1,,1,1,,,1,1,,1,,1,1,1,,,,,,,,,,,`;
+
+        // CSVをパース
+        function parseCSV(csv) {
+            const lines = csv.trim().split('\n');
+            const headers = lines[0].split(',');
+            skillsList = headers.slice(2); // 最初の2列（社名、氏名）を除く
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',');
+                if (values.length < 3) continue; // 不完全な行をスキップ
+                
+                const craftsman = {
+                    company: values[0] || '未設定',
+                    name: values[1] || '名前未設定',
+                    skills: {}
+                };
+                
+                // 会社名を追加
+                if (craftsman.company && craftsman.company !== '未設定') {
+                    companiesSet.add(craftsman.company);
+                }
+                
+                for (let j = 2; j < headers.length && j < values.length; j++) {
+                    craftsman.skills[headers[j]] = values[j] === '1';
+                }
+                
+                // 名前がある職人のみ追加
+                if (craftsman.name && craftsman.name !== '名前未設定') {
+                    craftsmenData.push(craftsman);
+                }
+            }
+            
+            // 統計を更新
+            document.getElementById('totalCraftsmen').textContent = craftsmenData.length;
+            document.getElementById('totalSkills').textContent = skillsList.length;
+            document.getElementById('totalCompanies').textContent = companiesSet.size;
+        }
+
+        // スキルチェックボックスを生成
+        function renderSkillCheckboxes() {
+            const skillsGrid = document.getElementById('skillsGrid');
+            skillsGrid.innerHTML = '';
+            
+            skillsList.forEach(skill => {
+                const div = document.createElement('div');
+                div.className = 'skill-checkbox';
+                const checkboxId = `skill-${skill.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                div.innerHTML = `
+                    <input type="checkbox" id="${checkboxId}" value="${skill}">
+                    <label for="${checkboxId}">${skill}</label>
+                `;
+                
+                // チェックボックスの変更イベント
+                const checkbox = div.querySelector('input');
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        div.classList.add('selected');
+                    } else {
+                        div.classList.remove('selected');
+                    }
+                });
+                
+                skillsGrid.appendChild(div);
+            });
+        }
+
+        // 職人を検索
+        function searchCraftsmen() {
+            const checkedSkills = [];
+            document.querySelectorAll('#skillsGrid input[type="checkbox"]:checked').forEach(checkbox => {
+                checkedSkills.push(checkbox.value);
+            });
+
+            if (checkedSkills.length === 0) {
+                alert('作業内容を選択してください');
+                return;
+            }
+
+            const searchMode = document.querySelector('input[name="searchMode"]:checked').value;
+            const results = craftsmenData.filter(craftsman => {
+                if (searchMode === 'OR') {
+                    // いずれかの作業ができる
+                    return checkedSkills.some(skill => craftsman.skills[skill]);
+                } else {
+                    // すべての作業ができる
+                    return checkedSkills.every(skill => craftsman.skills[skill]);
+                }
+            });
+
+            displayResults(results, checkedSkills);
+        }
+
+        // 検索結果を表示
+        function displayResults(results, searchedSkills) {
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsCount = document.getElementById('resultsCount');
+            const craftsmenGrid = document.getElementById('craftsmenGrid');
+
+            resultsSection.style.display = 'block';
+            resultsCount.textContent = `${results.length}人`;
+
+            if (results.length === 0) {
+                craftsmenGrid.innerHTML = `
+                    <div class="no-results">
+                        <div class="no-results-icon">🔍</div>
+                        <h3>該当する職人が見つかりませんでした</h3>
+                        <p>検索条件を変更してお試しください</p>
+                    </div>
+                `;
+                return;
+            }
+
+            craftsmenGrid.innerHTML = '';
+            results.forEach(craftsman => {
+                const card = document.createElement('div');
+                card.className = 'craftsman-card';
+                
+                // 職人が持っているスキルを抽出
+                const possessedSkills = Object.keys(craftsman.skills).filter(skill => craftsman.skills[skill]);
+                
+                card.innerHTML = `
+                    <div class="craftsman-header">
+                        <div class="craftsman-name">${craftsman.name}</div>
+                        <div class="craftsman-company">🏢 ${craftsman.company}</div>
+                    </div>
+                    <div class="craftsman-skills">
+                        ${possessedSkills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                    </div>
+                    <div class="skill-count">${possessedSkills.length}件の資格・作業</div>
+                `;
+                
+                craftsmenGrid.appendChild(card);
+            });
+
+            // 結果までスクロール
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // 選択をクリア
+        function clearSelection() {
+            document.querySelectorAll('#skillsGrid input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.parentElement.classList.remove('selected');
+            });
+            document.getElementById('resultsSection').style.display = 'none';
+        }
+
+        // 初期化
+        parseCSV(csvData);
+        renderSkillCheckboxes();
+    </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
