@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <!-- saved from url=(0130)file:///C:/Users/%E6%A0%AA%E5%BC%8F%E4%BC%9A%E7%A4%BE%E3%80%80%E3%82%BF%E3%82%B1%E3%83%80%E9%80%A0%E5%9C%92/Downloads/index_6.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -1063,20 +1065,7 @@ async function pushToGitHub() {
 }
 
 async function loadFromGitHub() {
-  try {
-    var url = 'https://raw.githubusercontent.com/' + GITHUB_USER + '/' + GITHUB_REPO + '/main/data.json?t=' + Date.now();
-    var res = await fetch(url);
-    if(!res.ok) return;
-    var saved = await res.json();
-    if(saved.data) data = saved.data;
-    if(saved.covers) COVERS = saved.covers;
-    if(saved.fixed) FIXED_CHECKED = saved.fixed;
-    if(saved.imgData) IMG_DATA = saved.imgData;
-    if(saved.kenchiku) KENCHIKU_TABLE = saved.kenchiku;
-    loadCheckState();
-    renderSidebar();
-    renderPreview();
-  } catch(e) {}
+  // 無効化
 }
 
 function resetAllData() {
@@ -1230,8 +1219,7 @@ document.getElementById('custDate').value = td.getFullYear() + '-' + mm + '-' + 
 loadData();
 loadCheckState();
 applyAdminUI();
-renderSidebar();
-renderPreview();
-loadFromGitHub();
+switchDoc('construction');
+// loadFromGitHub();
 </script>
 </body></html>
