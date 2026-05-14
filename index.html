@@ -207,13 +207,7 @@ body{font-family:Meiryo,'Yu Gothic',sans-serif;background:var(--bg);color:var(--
   </div>
 </div>
 
-<!-- GitHub Token入力バー（管理者のみ表示） -->
-<div id="tokenBar" style="display: none; background: rgb(26, 26, 46); padding: 8px 16px; align-items: center; gap: 10px; flex-wrap: wrap;">
-  <span style="font-size:11px;color:#ffd700;font-weight:700;">🔑 GitHub Token：</span>
-  <input id="tokenInput" type="password" placeholder="ghp_xxxxx..." style="flex:1;min-width:200px;max-width:360px;border:1px solid #444;border-radius:5px;padding:5px 10px;font-size:12px;background:#2a2a3e;color:#fff;">
-  <button onclick="saveToken()" style="padding:5px 14px;background:#ffd700;color:#1a1a2e;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;">保存</button>
-  <button onclick="pushToGitHub()" style="padding:5px 14px;background:#2ea44f;color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;">📤 ひな形をGitHubに送信</button>
-</div>
+
 
 <div class="cust-bar">
   <label for="custName">お客様名：</label>
@@ -456,7 +450,7 @@ function saveData() {
   try { localStorage.setItem('juyo_v9', JSON.stringify({data:data, kenchiku:KENCHIKU_TABLE, version:APP_VERSION})); } catch(e){}
 }
 function saveImgData() {
-  try { localStorage.setItem('juyo_img_data', JSON.stringify(IMG_DATA)); } catch(e){ alert('写真データが大きすぎて保存できません。写真を減らしてください。'); }
+  // 写真はHTMLに埋め込み済みのためlocalStorage保存不要
 }
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -1181,11 +1175,7 @@ function saveAll(){
   saveData();
   renderSidebar();
   renderPreview();
-  if(githubToken) {
-    pushToGitHub();
-  } else {
-    showToast('✅ ローカルに保存しました（GitHubトークン未設定）');
-  }
+  showToast('✅ ローカルに保存しました');
 }
 
 /* ── 切り替え ── */
